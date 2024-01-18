@@ -1,0 +1,12 @@
+{
+    "brightness": true,
+    "calculator": true,
+    "color_picker": true,
+    "controls": true,
+    "drives": true,
+    "dropzone": true,
+    "quicknotes": true,
+    "todo": true,
+    "volume_mixer": true,
+    "weather": true
+}
