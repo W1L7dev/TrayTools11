@@ -1,34 +1,43 @@
-import string
-from ctypes import windll
 import wmi
+import customtkinter as ctk
 
 
-def get_drives():
-    drives = []
-    # first, iterate over all letters in the alphabet and see if they are used
-    # to label a drive
-    for letter in string.ascii_uppercase:
-        if windll.kernel32.GetDriveTypeW(letter + ":/") > 1:
-            drives.append(letter + ":/")
+def drives_widget(master):
+    frame = ctk.CTkFrame(master, width=270, height=100)
+    ctk.CTkLabel(frame, text="Drives", font=("Arial", 15)).pack()
 
-        # now, check for the names by the letter found above
-    DRIVE_TYPES = {
-        0: "Unknown",
-        1: "No Root Directory",
-        2: "Removable Disk",
-        3: "Local Disk",
-        4: "Network Drive",
-        5: "Compact Disc",
-        6: "RAM Disk",
-    }
+    drives_dict = {}
+    drives = wmi.WMI().Win32_LogicalDisk()
+    for drive in drives:
+        if drive.DriveType in [2, 3]:
+            drives_dict[drive.Caption] = {
+                "name": drive.VolumeName,
+                "capacity": round(int(drive.Size) / 1024**3, 2),
+                "free": round(int(drive.FreeSpace) / 1024**3, 2),
+            }
 
-    names = []
-    c = wmi.WMI()
-    for drive in c.Win32_LogicalDisk():
-        names.append(drive.VolumeName)
 
-    return dict(zip(drives, names))
+    # for each drive in drives_dict, create a frame
+
+
+    for drive in drives_dict:
+        drive_frame = ctk.CTkFrame(frame)
+        drive_frame.pack(fill="x", padx=5, pady=5)
+
+        ctk.CTkLabel(drive_frame, text=f"{drive} ({drives_dict[drive]['name']})").pack(
+            side="left", padx=5, pady=5
+        )
+
+        capacity = float(drives_dict[drive]["capacity"])
+        free = float(drives_dict[drive]["free"])
+        usage = round((capacity - free) / capacity * 100, 2)
+
+        print(f"[DRIVE] {drives_dict[drive]}\n[CAPACITY] {capacity}\n[FREE] {free}\n[USAGE] {usage}\n-------")
+        prgress_bar = ctk.CTkProgressBar(drive_frame, width=100, height=10)
+        prgress_bar.pack(side="right", padx=5, pady=5)
+        prgress_bar.set(usage/100)
+    return frame
 
 
 if __name__ == "__main__":
-    print(get_drives())
+    print(drives_widget())

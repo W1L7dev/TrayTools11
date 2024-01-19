@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import json
 
-from widgets import brightness, weather
+from widgets import brightness, weather, drives
 
 class App(ctk.CTk):
     def __init__(self, title: str) -> None:
@@ -12,12 +12,11 @@ class App(ctk.CTk):
 
         self.geometry(f"270x700")
 
-        ctk.CTkLabel(self, text="TrayTools11", font=("Arial", 20)).grid(row=0, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
-        ctk.CTkButton(self, text="X", command=self.destroy, width=25, height=25).grid(row=0, column=3, padx=5, pady=5) #TODO: Close the window into system tray
+        ctk.CTkLabel(self, text="TrayTools11", font=("Arial", 20)).pack(padx=5, pady=5)
 
-        brightness.brightness_widget(self).grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
-        weather.weather_widget(self).grid(row=2, column=0, sticky="nsew", padx=5, pady=5)
-
+        brightness.brightness_widget(self).pack(padx=5, pady=5)
+        weather.weather_widget(self).pack(padx=5, pady=5)
+        drives.drives_widget(self).pack(padx=5, pady=5)
 
 
 if __name__ == "__main__":

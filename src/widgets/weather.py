@@ -4,7 +4,7 @@ import customtkinter as ctk
 
 
 def weather_widget(master):
-    frame = ctk.CTkFrame(master)
+    frame = ctk.CTkFrame(master, width=400, height=100)
     ctk.CTkLabel(frame, text="Weather", font=("Arial", 15)).pack()
 
     ip = geocoder.ip("me")
@@ -23,6 +23,6 @@ def weather_widget(master):
 
     data = r.json()
 
-    ctk.CTkLabel(frame, text=f"Currently is {round(data["main"]["temp"])}°C in {data['name']}").pack()
+    ctk.CTkLabel(frame, text=f"Currently is {round(data["main"]["temp"])}°C in {data['name']}").pack(padx=5, pady=5)
 
     return frame

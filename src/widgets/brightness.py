@@ -3,7 +3,7 @@ import screen_brightness_control as sbc
 
 
 def brightness_widget(master):
-    frame = ctk.CTkFrame(master)
+    frame = ctk.CTkFrame(master, width=270, height=100)
 
     ctk.CTkLabel(frame, text="Brightness", font=("Arial", 15)).pack()
 
